@@ -26,5 +26,4 @@ make ecc
 echo "Then the rest..."
 make -j$NCPU
 
-cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
 cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
