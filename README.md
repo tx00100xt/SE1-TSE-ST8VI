@@ -6,11 +6,9 @@ This mod required [https://gitflic.ru/project/tx00100xt/serioussamclassic] to ru
 ST8 MOD VI was created by fans of the game Serious Sam Classic and is distributed for free.
 Remark:  UED (from China) is author this mod for windows.
 
-![DW1](https://gitflic.ru/project/tx00100xt/se1-tse-dancesworld/blob/raw?file=Images%2Fdw-1.png&commit=b7264a67f2411c67a9680d3f56a65fdf125c4b25)
+![ST81](https://gitflic.ru/project/tx00100xt/se1-tse-st8vi/blob/raw?file=Images%2Fst8vi-1.png&commit=6e891858ea6b75ec4e7d4894e28e00b30a89b2ee)
 
-![DW2](https://gitflic.ru/project/tx00100xt/se1-tse-dancesworld/blob/raw?file=Images%2Fdw-2.png&commit=b7264a67f2411c67a9680d3f56a65fdf125c4b25)
-
-![DW3](https://gitflic.ru/project/tx00100xt/se1-tse-dancesworld/blob/raw?file=Images%2Fdw-3.png&commit=b7264a67f2411c67a9680d3f56a65fdf125c4b25)
+![ST82](https://gitflic.ru/project/tx00100xt/se1-tse-st8vi/blob/raw?file=Images%2Fst8vi-2.png&commit=6e891858ea6b75ec4e7d4894e28e00b30a89b2ee)
 
 
 Download [SamTSE-ST8VI.tar.xz] archive and unpack to  SeriousSamClassic/SamTSE/ directory.
