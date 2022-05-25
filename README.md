@@ -6,9 +6,9 @@ This mod required https://github.com/tx00100xt/SeriousSamClassic to run.
 ST8 MOD VI was created by fans of the game Serious Sam Classic and is distributed for free.
 Remark:  UED (from China) is author this mod for windows.
 
-![ST81](https://raw.githubusercontent.com/tx00100xt/SE1-TFE-ST8VI/main/Images/st8vi-1.png)
+![ST81](https://raw.githubusercontent.com/tx00100xt/SE1-TSE-ST8VI/main/Images/st8vi-1.png)
 
-![ST82](https://raw.githubusercontent.com/tx00100xt/SE1-TFE-ST8VI/main/Images/st8vi-2.png)
+![ST82](https://raw.githubusercontent.com/tx00100xt/SE1-TSE-ST8VI/main/Images/st8vi-2.png)
 
 
 Download [SamTSE-ST8VI.tar.xz] archive and unpack to  SeriousSamClassic/SamTSE/ directory.
