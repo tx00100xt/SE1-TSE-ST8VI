@@ -2,7 +2,7 @@
 
 What is ST8 MOD VI?
 This is a modification for Serious Sam Classic The Second Encounter. 
-This mod required https://github.com/tx00100xt/SeriousSamClassic to run.
+This mod required https://github.com/tx00100xt/SeriousSamClassic or https://github.com/tx00100xt/SeriousSamClassic-VK to run.
 ST8 MOD VI was created by fans of the game Serious Sam Classic and is distributed for free.
 Remark:  UED (from China) is author this mod for windows.
 
