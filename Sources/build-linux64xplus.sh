@@ -18,7 +18,7 @@ rm -rf cmake-build
 
 mkdir $_
 cd $_
-cp -vfr ../EntitiesMP/PlayerWeapons_old.es ../EntitiesMP/PlayerWeapons.es
+cp -vfr ../EntitiesMP/PlayerWeaponsHD.es ../EntitiesMP/PlayerWeapons.es
 
 #cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 ..
 #ninja
@@ -33,5 +33,4 @@ make ecc
 echo "Then the rest..."
 make -j$NCPU
 
-cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
-cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
+cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUNHD/Bin

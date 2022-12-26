@@ -272,7 +272,7 @@ public:
 					{
 						if(_pTimer->GetRealTimeTick()<f9cCandidate[i].tmExlusionEnd)
 						{	
-							CPrintF(TRANS("ANTI_F9: Refused client %d IP %s He will be able to join again in %02f seconds\n"),iClient,clcClient[iClient].strAddress, f9cCandidate[i].tmExlusionEnd-_pTimer->GetRealTimeTick());
+							CPrintF(TRANS("ANTI_F9: Refused client %d IP %s He will be able to join again in %02f seconds\n"),iClient,(const char *)clcClient[iClient].strAddress, f9cCandidate[i].tmExlusionEnd-_pTimer->GetRealTimeTick());
 							AddClientToKickList(iClient, clcClient[iClient].strAddress,i);
 							clcClient[iClient].bAcknowledged = TRUE;
 						} else
@@ -288,7 +288,7 @@ public:
 						//if this player has f9d too often already
 						if(f9cCandidate[i].ctF9s>ser_AntiF9_ctMaxF9s)
 						{	
-							CPrintF(TRANS("ANTI_F9: Client %d IP %s kicked for reconnecting %d times. He will be able to join again in %02f seconds\n"),iClient,clcClient[iClient].strAddress,f9cCandidate[i].ctF9s,ser_AntiF9_tmWaitTime);
+							CPrintF(TRANS("ANTI_F9: Client %d IP %s kicked for reconnecting %d times. He will be able to join again in %02f seconds\n"),iClient,(const char *)clcClient[iClient].strAddress,f9cCandidate[i].ctF9s,ser_AntiF9_tmWaitTime);
 							f9cCandidate[i].bExcluded = TRUE;
 							f9cCandidate[i].tmExlusionEnd = _pTimer->GetRealTimeTick() + ser_AntiF9_tmWaitTime;
 							AddClientToKickList(iClient, clcClient[iClient].strAddress,i);
@@ -321,11 +321,11 @@ public:
 	void DisconnectClient(INDEX iClient,INDEX iReason)
 	{
 	  CTString strReason = "";
-	  if(iReason==1){ CPrintF(TRANS("ANTI_FAKE_CLIENT: Client %d IP %s kicked: Other client has just joined from same address\n"),iClient,clcClient[iClient].strAddress);
+	  if(iReason==1){ CPrintF(TRANS("ANTI_FAKE_CLIENT: Client %d IP %s kicked: Other client has just joined from same address\n"),iClient,(const char *)clcClient[iClient].strAddress);
 					  strReason = "";
 					
 	  } else
-	  { CPrintF(TRANS("ANTI_FAKE_CLIENT: Client %d IP %s kicked: No packet received\n"),iClient,clcClient[iClient].strAddress);
+	  { CPrintF(TRANS("ANTI_FAKE_CLIENT: Client %d IP %s kicked: No packet received\n"),iClient,(const char *)clcClient[iClient].strAddress);
 	  }	  
 	  //execute twice so he's forced to disconnect (else it would expect aknowledge packet from client)
 	  KickClientAdvanced(iClient, strReason, 2);
@@ -383,7 +383,7 @@ public:
 				    clcClient[i].bAcknowledged = TRUE;
 					if(ser_Info_iPrintMessages>=2)
 					{
-						CPrintF(TRANS("ANTI_FAKE_CLIENT: Packet received from client %d IP: %s, that's good\n"),i,clcClient[i].strAddress);
+						CPrintF(TRANS("ANTI_FAKE_CLIENT: Packet received from client %d IP: %s, that's good\n"),i,(const char *)clcClient[i].strAddress);
 					}
 				  }
 				}		
@@ -421,7 +421,7 @@ public:
 			  {	
 				  if(_cmiComm.Server_GetClientName(i).Matches(ssastrIPExceptions[iException]))
 				  {
-					  CPrintF(TRANS("ANTI_FAKE_CLIENT: Client %d IP %s is in the IP exception list\n"),i,_cmiComm.Server_GetClientName(i));
+					  CPrintF(TRANS("ANTI_FAKE_CLIENT: Client %d IP %s is in the IP exception list\n"),i,(const char *)_cmiComm.Server_GetClientName(i));
 					  bIsIPException = TRUE;
 					  break;
 				  }
@@ -970,7 +970,7 @@ public:
 		ctMsgLength = strMultiKill.Length();
 		if(ka_bOneLinePerMsg)
 		{ if(ctMsgLength>CT_MAX_CHARSPERMSGLINE)		
-		  {  CPrintF(TRANS("^cff0000WARNING^C: Multikill message:\n\" %s \" is too long!\nMust be <CT_MAX_CHARSPERMSGLINE"),strMultiKill);
+		  {  CPrintF(TRANS("^cff0000WARNING^C: Multikill message:\n\" %s \" is too long!\nMust be <CT_MAX_CHARSPERMSGLINE"),(const char *)strMultiKill);
 		  }	
 		  if(ka_bTrimNamesLeft)
 		  { strtmpPlayerName.TrimLeft(CT_MAX_CHARSPERMSGLINE-ctMsgLength);
@@ -1008,7 +1008,7 @@ public:
 		ctMsgLength = strKillingSpree.Length();
 		if(ka_bOneLinePerMsg)
 		{ if(ctMsgLength>CT_MAX_CHARSPERMSGLINE)		
-		  {  CPrintF(TRANS("^cff0000WARNING^C: Multikill message:\n\" %s \" is too long!\nMust be <CT_MAX_CHARSPERMSGLINE"),strKillingSpree);
+		  {  CPrintF(TRANS("^cff0000WARNING^C: Multikill message:\n\" %s \" is too long!\nMust be <CT_MAX_CHARSPERMSGLINE"),(const char *)strKillingSpree);
 		  }		  
 		  if(ka_bTrimNamesLeft)
 		  { strtmpPlayerName.TrimLeft(CT_MAX_CHARSPERMSGLINE-ctMsgLength);
@@ -2662,8 +2662,8 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld,
 								//delete the white spaces at the right and left ASSUMPTION: no file name has white space at the very left or right
 								strsplitOriginalName.TrimSpacesLeft();strsplitOriginalName.TrimSpacesRight();strsplitOriginalFile.TrimSpacesLeft();strsplitOriginalFile.TrimSpacesRight();
 								//if the file doesn't exist, if original file and original name length don't match
-								if(!FileExists(strsplitOriginalFile)) { CPrintF(TRANS("Original file ' %s ' does not exist! Make sure you put the ' Original file ' directory BEFORE the comma\n"),strsplitOriginalFile); }
-								else if(strsplitOriginalName.Length()!=strsplitOriginalFile.Length()){ CPrintF(TRANS("Names ' %s ' and ' %s ' do not have the same length!\n"),strsplitOriginalFile,strsplitOriginalName); }
+								if(!FileExists(strsplitOriginalFile)) { CPrintF(TRANS("Original file ' %s ' does not exist! Make sure you put the ' Original file ' directory BEFORE the comma\n"),(const char *)strsplitOriginalFile); }
+								else if(strsplitOriginalName.Length()!=strsplitOriginalFile.Length()){ CPrintF(TRANS("Names ' %s ' and ' %s ' do not have the same length!\n"),(const char *)strsplitOriginalFile,(const char *)strsplitOriginalName); }
 								else 
 								{	//add them to the stack array
 									sa_strOriginalFilesAndNames.Push() = strsplitOriginalFile; sa_strOriginalFilesAndNames.Push() = strsplitOriginalName;
@@ -2671,19 +2671,19 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld,
 									((CSerial *)ba)->ser_FileName =  strsplitOriginalFile;		
 									((CSerial *)ba)->AddToCRCTable();
 								}
-							} else { CPrintF(TRANS("Can't retrieve original name and original file from line ' %s ' . No separator ' , ' found!\n"),strtmp); }
+							} else { CPrintF(TRANS("Can't retrieve original name and original file from line ' %s ' . No separator ' , ' found!\n"),(const char *)strtmp); }
 						}
 						else if(FileExists(strtmp))
 						{
 							((CSerial *)ba)->ser_FileName =  strtmp;		
 							((CSerial *)ba)->AddToCRCTable();
-						} else { CPrintF(TRANS("Can't add ' %s ' to custom CRC list. File doesn't exist!\n"),strtmp); }
+						} else { CPrintF(TRANS("Can't add ' %s ' to custom CRC list. File doesn't exist!\n"),(const char *)strtmp); }
 						strCustomList.TrimLeft(strCustomList.Length()-(strtmp.Length()+1));
 					}
 				}
 				catch (const char *strError) 
 				{
-					CPrintF(TRANS("Can't load' CustomCRCList.lst ':\n%s\n"), strError);
+					CPrintF(TRANS("Can't load' CustomCRCList.lst ':\n%s\n"), (const char *)strError);
 				}							
 				_pNetwork->FinishCRCGather();
 				//handle the file replacements, Count>1 because there must be at least 2
@@ -2710,7 +2710,7 @@ BOOL CGame::NewGame(const CTString &strSessionName, const CTFileName &fnWorld,
 					if(iStringShift!=-1)
 					{
 						memcpy(&_pNetwork->ga_pubCRCList[iStringShift], (const char *)strsplitOriginalName, strlen((const char *)strsplitOriginalName));
-					} else { CPrintF(TRANS("ERROR: Can't locate ' %s ' in ' ga_pubCRCList '"),strsplitOriginalFile); }					
+					} else { CPrintF(TRANS("ERROR: Can't locate ' %s ' in ' ga_pubCRCList '"),(const char *)strsplitOriginalFile); }					
 				}
 			} else { CPrintF(TRANS("ERROR: ba pointer is NULL")); }
 		}
