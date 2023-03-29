@@ -82,6 +82,11 @@ Supported OS
 * `Windows`
 * `Raspberry PI OS`
 
+### Build status
+|CI|Platform|Compiler|Configurations|Platforms|Status|
+|---|---|---|---|---|---|
+|GitHub Actions|Windows, Ubuntu|MSVC, GCC|Release|x64|![GitHub Actions Build Status](https://github.com/tx00100xt/SE1-TSE-ST8VI/actions/workflows/cibuild.yml/badge.svg)
+
 License
 -------
 
