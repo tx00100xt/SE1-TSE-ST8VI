@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build-alpine:
+  build-alpine-x86:
     name: Alpine ${{ matrix.Configuration }} ${{ matrix.Platform }}
     runs-on: ubuntu-latest
     strategy:
@@ -42,8 +42,9 @@ jobs:
       run: |
         cd ${{github.workspace}}/Sources 
         find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
-        cat CMakeLists.txt | grep mtune
-        cmake -B ${{github.workspace}}/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE
+        cat CMakeLists.txt | grep mtune        
+        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
+        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
 
     - name: Run Build
       shell: alpine.sh {0}
@@ -52,14 +53,147 @@ jobs:
           make ecc
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x32/SamTSE/Mods/ST8VI/Bin
+          cp -vfr Debug/*.so ../../x32/SamTSE/Mods/JumpFUN/Bin
+          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+          cd ${{github.workspace}}/Sources/build-x86-xplus    
+          make ecc
+          make -j$(nproc || echo 4)
+          cp -vfr Debug/*.so ../../x32/SamTSE/Mods/JumpFUNHD/Bin
           cd ${{github.workspace}}
-          tar -cJpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-lnx-x86-bin.tar.xz x32
+          tar -cJpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz x32
+          
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz
+        path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz          
+
+  build-alpine-x64:
+    name: Alpine ${{ matrix.Configuration }} ${{ matrix.Platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Release]
+        Platform: [x86_64]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install latest stable Alpine Linux
+      uses: jirutka/setup-alpine@master
+      with:
+        arch: ${{ matrix.Platform }}
+        branch: 'latest-stable'
+        packages: build-base cmake bison flex nasm xz sed sdl2-dev zlib-dev libogg-dev libvorbis-dev
+        
+    - name: Get current date
+      id: date
+      uses: Kaven-Universe/github-action-current-date-time@v1
+      with:
+         format: "YYYYMMDD"
+
+    - name: Show current date
+      run: |
+        echo "${{ steps.date.outputs.time }}"
+        
+    - name: Run CMake
+      shell: alpine.sh {0}
+      run: |
+        cd ${{github.workspace}}/Sources 
+        find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
+        cat CMakeLists.txt | grep mtune        
+        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+
+    - name: Run Build
+      shell: alpine.sh {0}
+      run: |
+          cd ${{github.workspace}}/Sources/build-x64    
+          make ecc
+          make -j$(nproc || echo 4)
+          cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
+          cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
+          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+          cd ${{github.workspace}}/Sources/build-x64-xplus    
+          make ecc
+          make -j$(nproc || echo 4)
+          cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUNHD/Bin
+          cd ${{github.workspace}}
+          tar -cJpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz x64
+          
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz
+        path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz          
+
+  build-ubuntu-x86:
+    name: Ubuntu ${{ matrix.Configuration }} ${{ matrix.Platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Release]
+        Platform: [x86]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install packages
+      run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update -qq
+          sudo apt-get -y install --allow-downgrades gcc-multilib g++-multilib ninja-build libglib2.0-dev:i386 libjpeg-dev:i386 libsdl2-dev:i386 libcurl4-openssl-dev:i386 &&
+          sudo apt-get -y install --allow-downgrades libsdl2-dev:i386 libogg-dev:i386 libvorbis-dev:i386 &&
+          sudo apt-get -y install --allow-downgrades bison flex sed zlib1g-dev:i386       
+
+    - name: Get current date
+      id: date
+      uses: Kaven-Universe/github-action-current-date-time@v1
+      with:
+         format: "YYYYMMDD"
+
+    - name: Show current date
+      run: |
+        echo "${{ steps.date.outputs.time }}"
+        
+    - name: Run CMake
+      run: |
+          cd ${{github.workspace}}/Sources
+          find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
+          cat CMakeLists.txt | grep mtune
+          cmake -B ${{github.workspace}}/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE
+   
+    - name: Run CMake
+      run: |
+          cd ${{github.workspace}}/Sources
+          cp -vfr EntitiesMP/PlayerWeaponsHD.es EntitiesMP/PlayerWeapons.es
+          cat CMakeLists.txt | grep mtune
+          cmake -B ${{github.workspace}}/Sources/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE 
+ 
+    - name: Run Build
+      run: |
+          cd ${{github.workspace}}/Sources/build-x86    
+          make ecc
+          make -j$(nproc || echo 4)
+          cp -vfr Debug/*.so ../../x32/SamTSE/Mods/ST8VI/Bin
+          cp -vfr Debug/*.so ../../x32/SamTSE/Mods/JumpFUN/Bin
+          
+    - name: Run Build
+      run: |
+          cd ${{github.workspace}}/Sources/build-x86-xplus    
+          make ecc
+          make -j$(nproc || echo 4)
+          cp -vfr Debug/*.so ../../x32/SamTSE/Mods/JumpFUNHD/Bin
+          cd ${{github.workspace}}
+          XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-lnx-x86-bin.tar.xz x32
           
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: SamTSE-ST8VI-${{ steps.date.outputs.time }}-lnx-x86-bin.tar.xz
-        path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-lnx-x86-bin.tar.xz          
+        path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-lnx-x86-bin.tar.xz 
 
   build-ubuntu-x64:
     name: Ubuntu ${{ matrix.Configuration }} ${{ matrix.Platform }}
@@ -95,13 +229,28 @@ jobs:
           find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
           cat CMakeLists.txt | grep mtune
           cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-          
+   
+    - name: Run CMake
+      run: |
+          cd ${{github.workspace}}/Sources
+          cp -vfr EntitiesMP/PlayerWeaponsHD.es EntitiesMP/PlayerWeapons.es
+          cat CMakeLists.txt | grep mtune
+          cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}  
+ 
     - name: Run Build
       run: |
           cd ${{github.workspace}}/Sources/build-x64    
           make ecc
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
+          cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
+          
+    - name: Run Build
+      run: |
+          cd ${{github.workspace}}/Sources/build-x64-xplus    
+          make ecc
+          make -j$(nproc || echo 4)
+          cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUNHD/Bin
           cd ${{github.workspace}}
           XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-lnx-amd64-bin.tar.xz x64
           
@@ -137,9 +286,28 @@ jobs:
                
     - name: MS Build
       working-directory: Sources
-      run: | 
+      run: |
+         del EntitiesMP\PlayerWeapons.es
+         copy EntitiesMP\PlayerWeaponsHD.es EntitiesMP\PlayerWeapons.es
          msbuild /m /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" ST8VI.sln 
          cd ${{github.workspace}}
+         copy x32\SamTSE\Mods\JumpFUN\Bin\EntitiesMP.dll x32\SamTSE\Mods\JumpFUNHD\Bin   
+         copy x32\SamTSE\Mods\JumpFUN\Bin\GameMP.dll x32\SamTSE\Mods\JumpFUNHD\Bin   
+         del x32\SamTSE\Mods\JumpFUN\Bin\*.*
+         
+    - name: MS Build
+      working-directory: Sources
+      run: |         
+         del EntitiesMP\PlayerWeapons.es
+         copy EntitiesMP\PlayerWeapons_old.es EntitiesMP\PlayerWeapons.es 
+         msbuild /t:Clean /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" ST8VI.sln
+         msbuild /m /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" ST8VI.sln        
+         cd ${{github.workspace}}
+         copy x32\SamTSE\Mods\JumpFUN\Bin\EntitiesMP.dll x32\SamTSE\Mods\ST8VI\Bin   
+         copy x32\SamTSE\Mods\JumpFUN\Bin\GameMP.dll x32\SamTSE\Mods\ST8VI\Bin          
+         del x32\SamTSE\Mods\JumpFUN\Bin\*.lib 
+         del x32\SamTSE\Mods\JumpFUN\Bin\*.exe 
+         del x32\SamTSE\Mods\JumpFUN\Bin\*.map        
          7z a -mx=9 SamTSE-ST8VI-${{ steps.date.outputs.time }}-win32-bin.7z x32
       
     - name: Upload artifact
@@ -175,9 +343,28 @@ jobs:
         
     - name: MS Build
       working-directory: Sources
-      run: | 
+      run: |
+         del EntitiesMP\PlayerWeapons.es
+         copy EntitiesMP\PlayerWeaponsHD.es EntitiesMP\PlayerWeapons.es
          msbuild /m /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" ST8VI.sln 
          cd ${{github.workspace}}
+         copy x64\SamTSE\Mods\JumpFUN\Bin\EntitiesMP.dll x64\SamTSE\Mods\JumpFUNHD\Bin   
+         copy x64\SamTSE\Mods\JumpFUN\Bin\GameMP.dll x64\SamTSE\Mods\JumpFUNHD\Bin   
+         del x64\SamTSE\Mods\JumpFUN\Bin\*.*
+         
+    - name: MS Build
+      working-directory: Sources
+      run: |         
+         del EntitiesMP\PlayerWeapons.es
+         copy EntitiesMP\PlayerWeapons_old.es EntitiesMP\PlayerWeapons.es 
+         msbuild /t:Clean /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" ST8VI.sln
+         msbuild /m /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" ST8VI.sln        
+         cd ${{github.workspace}}
+         copy x64\SamTSE\Mods\JumpFUN\Bin\EntitiesMP.dll x64\SamTSE\Mods\ST8VI\Bin   
+         copy x64\SamTSE\Mods\JumpFUN\Bin\GameMP.dll x64\SamTSE\Mods\ST8VI\Bin          
+         del x64\SamTSE\Mods\JumpFUN\Bin\*.lib 
+         del x64\SamTSE\Mods\JumpFUN\Bin\*.exe 
+         del x64\SamTSE\Mods\JumpFUN\Bin\*.map       
          7z a -mx=9 SamTSE-ST8VI-${{ steps.date.outputs.time }}-win64-bin.7z x64
       
         
@@ -222,10 +409,17 @@ jobs:
             awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
             cat CMakeLists.txt | grep mtune
             cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+            cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
             cd ${{github.workspace}}/Sources/build-x64
             make ecc
             make -j$(sysctl -n hw.ncpu || echo 4)
             cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
+            cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
+            cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+            cd ${{github.workspace}}/Sources/build-x64-xplus
+            make ecc
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUNHD/Bin          
             cd ${{github.workspace}}
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz x64
                       
