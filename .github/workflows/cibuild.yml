@@ -473,8 +473,8 @@ jobs:
             uname -a
             gcc -c -Q -mcpu=native --help=target
             git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git
-            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-armv7l -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mbe32 -DCMAKE_CXX_FLAGS=-mbe32 -DUSE_I386_NASM_ASM=FALSE -DTFE=TRUE -DRPI4=TRIE
-            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-armv7l-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mbe32 -DCMAKE_CXX_FLAGS=-mbe32 -DUSE_I386_NASM_ASM=FALSE -DTFE=TRUE -DRPI4=TRIE
+            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-armv7l -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mbe32 -DCMAKE_CXX_FLAGS=-mbe32 -DUSE_I386_NASM_ASM=FALSE -DRPI4=TRIE
+            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-armv7l-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mbe32 -DCMAKE_CXX_FLAGS=-mbe32 -DUSE_I386_NASM_ASM=FALSE -DRPI4=TRIE
             make -C SE1-TSE-ST8VI/Sources/build-armv7l ecc
             make -j4 -C SE1-TSE-ST8VI/Sources/build-armv7l
             cp -vfr SE1-TSE-ST8VI/Sources/build-armv7l/Debug/*.so SE1-TSE-ST8VI/x32/SamTSE/Mods/JumpFUN/Bin 
@@ -539,8 +539,8 @@ jobs:
             uname -a
             gcc -c -Q -mcpu=native --help=target
             git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git
-            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-aarch64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE -DRPI4=TRIE
-            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-aarch64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE -DRPI4=TRIE
+            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-aarch64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DRPI4=TRIE
+            cmake SE1-TSE-ST8VI/Sources -B SE1-TSE-ST8VI/Sources/build-aarch64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DRPI4=TRIE
             make -C SE1-TSE-ST8VI/Sources/build-aarch64 ecc
             make -j4 -C SE1-TSE-ST8VI/Sources/build-aarch64
             cp -vfr SE1-TSE-ST8VI/Sources/build-aarch64/Debug/*.so SE1-TSE-ST8VI/x64/SamTSE/JumpFUN/Bin 
