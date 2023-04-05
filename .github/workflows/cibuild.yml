@@ -478,8 +478,8 @@ jobs:
             make -C SE1-TSE-ST8VI/Sources/build-armv7l ecc
             make -j4 -C SE1-TSE-ST8VI/Sources/build-armv7l
             cp -vfr SE1-TSE-ST8VI/Sources/build-armv7l/Debug/*.so SE1-TSE-ST8VI/x32/SamTSE/Mods/JumpFUN/Bin 
-            cp -vfr SE1-TSE-ST8VI/Sources/build-aarch64/Debug/*.so SE1-TSE-ST8VI/x64/SamTSE/Mods/ST8VI/Bin 
-            cp -vfr SE1-TSE-ST8VI/Sources/Entities/PlayerWeaponsHD.es SE1-TSE-ST8VI/Sources/Entities/PlayerWeapons.es
+            cp -vfr SE1-TSE-ST8VI/Sources/build-armv7l/Debug/*.so SE1-TSE-ST8VI/x64/SamTSE/Mods/ST8VI/Bin 
+            cp -vfr SE1-TSE-ST8VI/Sources/EntitiesMP/PlayerWeaponsHD.es SE1-TSE-ST8VI/Sources/EntitiesMP/PlayerWeapons.es
             make -C SE1-TSE-ST8VI/Sources/build-armv7l-xplus ecc
             make -j4 -C SE1-TSE-ST8VI/Sources/build-armv7l-xplus
             cp -vfr SE1-TSE-ST8VI/Sources/build-armv7l-xplus/Debug/*.so SE1-TSE-ST8VI/x32/SamTSE/Mods/JumpFUNHD/Bin            
@@ -545,7 +545,7 @@ jobs:
             make -j4 -C SE1-TSE-ST8VI/Sources/build-aarch64
             cp -vfr SE1-TSE-ST8VI/Sources/build-aarch64/Debug/*.so SE1-TSE-ST8VI/x64/SamTSE/Mods/JumpFUN/Bin 
             cp -vfr SE1-TSE-ST8VI/Sources/build-aarch64/Debug/*.so SE1-TSE-ST8VI/x64/SamTSE/Mods/ST8VI/Bin 
-            cp -vfr SE1-TSE-ST8VI/Sources/Entities/PlayerWeaponsHD.es SE1-TSE-ST8VI/Sources/Entities/PlayerWeapons.es
+            cp -vfr SE1-TSE-ST8VI/Sources/EntitiesMP/PlayerWeaponsHD.es SE1-TSE-ST8VI/Sources/EntitiesMP/PlayerWeapons.es
             make -C SE1-TSE-ST8VI/Sources/build-aarch64-xplus ecc
             make -j4 -C SE1-TSE-ST8VI/Sources/build-aarch64-xplus
             cp -vfr SE1-TSE-ST8VI/Sources/build-aarch64-xplus/Debug/*.so SE1-TSE-ST8VI/x64/SamTSE/Mods/JumpFUNHD/Bin           
