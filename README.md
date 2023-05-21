@@ -15,6 +15,10 @@ Remark:  UED (from China) is author this mod for windows.
 
 
 Download [SamTSE-ST8VI.tar.xz] archive and unpack to  SeriousSamClassic/SamTSE/ directory.
+You can also download the archive using curl or wget:
+```
+wget https://archive.org/download/sam-tse-st8vi/SamTSE-ST8VI.tar.xz
+```
 To start the modification, use the game menu - item Modification.
 
 Building Serious Sam Classic ST8 MOD VI (only for SS:TSE)
