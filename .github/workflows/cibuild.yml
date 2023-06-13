@@ -37,25 +37,26 @@ jobs:
       run: |
         echo "${{ steps.date.outputs.time }}"
         
-    - name: Run CMake
+    - name: Run Prepare
       shell: alpine.sh {0}
       run: |
         cd ${{github.workspace}}/Sources 
         find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
         cat CMakeLists.txt | grep mtune        
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
+ 
     - name: Run Build
       shell: alpine.sh {0}
       run: |
+          cd ${{github.workspace}}/Sources
+          CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE         
           cd ${{github.workspace}}/Sources/build-x86    
-          make ecc
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x32/SamTSE/Mods/ST8VI/Bin
           cp -vfr Debug/*.so ../../x32/SamTSE/Mods/JumpFUN/Bin
           cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+          cd ${{github.workspace}}/Sources
+          CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE          
           cd ${{github.workspace}}/Sources/build-x86-xplus    
-          make ecc
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x32/SamTSE/Mods/JumpFUNHD/Bin
           cd ${{github.workspace}}
@@ -96,25 +97,26 @@ jobs:
       run: |
         echo "${{ steps.date.outputs.time }}"
         
-    - name: Run CMake
+    - name: Run Prepare
       shell: alpine.sh {0}
       run: |
         cd ${{github.workspace}}/Sources 
         find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
-        cat CMakeLists.txt | grep mtune        
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+        cat CMakeLists.txt | grep mtune 
+        
     - name: Run Build
       shell: alpine.sh {0}
       run: |
+          cd ${{github.workspace}}/Sources 
+          CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
           cd ${{github.workspace}}/Sources/build-x64    
-          make ecc
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
           cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
-          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es  
+          cd ${{github.workspace}}/Sources 
+          CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
           cd ${{github.workspace}}/Sources/build-x64-xplus    
-          make ecc
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUNHD/Bin
           cd ${{github.workspace}}
