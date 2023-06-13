@@ -342,15 +342,14 @@ jobs:
             awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
             cat CMakeLists.txt | grep mtune
             cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-            cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
             cd ${{github.workspace}}/Sources/build-x64
-            make ecc
             make -j$(sysctl -n hw.ncpu || echo 4)
             cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
             cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
             cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+            cd ${{github.workspace}}/Sources
+            cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}            
             cd ${{github.workspace}}/Sources/build-x64-xplus
-            make ecc
             make -j$(sysctl -n hw.ncpu || echo 4)
             cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUNHD/Bin          
             cd ${{github.workspace}}
@@ -362,7 +361,54 @@ jobs:
           name: SamTSE-ST8VI-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz
           path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz      
     
-    
+  build-macos-x64:
+    name: macOS ${{ matrix.Configuration }} ${{ matrix.Platform }}
+    runs-on: macos-12
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Release]
+        Platform: [x64]    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get current date
+        id: date
+        uses: Kaven-Universe/github-action-current-date-time@v1
+        with:
+          format: "YYYYMMDD"
+
+      - name: Show current date
+        run: |
+          echo "${{ steps.date.outputs.time }}"
+          
+      - name: Build on macOS
+        run: |
+            uname -a
+            sudo pkg install -y bison flex sdl2 libogg libvorbis zlib-ng cmake
+            cd ${{github.workspace}}/Sources
+            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
+            cat CMakeLists.txt | grep mtune
+            cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+            cd ${{github.workspace}}/Sources/build-x64
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            cp -vfr Debug/*.dylib ../../x64/SamTSE/Mods/ST8VI/Bin
+            cp -vfr Debug/*.dylib ../../x64/SamTSE/Mods/JumpFUN/Bin
+            cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
+            cd ${{github.workspace}}/Sources
+            cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}            
+            cd ${{github.workspace}}/Sources/build-x64-xplus
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            cp -vfr Debug/*.dylib ../../x64/SamTSE/Mods/JumpFUNHD/Bin          
+            cd ${{github.workspace}}
+            XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SamTSE-ST8VI-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz x64
+                      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SamTSE-ST8VI-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz
+          path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz      
+          
   build-raspios-armv7l:
     name: RPi OS Lite ${{ matrix.Configuration }} ${{ matrix.arch }}
     runs-on: ubuntu-latest
