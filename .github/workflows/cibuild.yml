@@ -160,13 +160,6 @@ jobs:
           find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
           cat CMakeLists.txt | grep mtune
           cmake -B ${{github.workspace}}/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-   
-    - name: Run CMake
-      run: |
-          cd ${{github.workspace}}/Sources
-          cp -vfr EntitiesMP/PlayerWeaponsHD.es EntitiesMP/PlayerWeapons.es
-          cat CMakeLists.txt | grep mtune
-          cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}  
  
     - name: Run Build
       run: |
@@ -175,6 +168,13 @@ jobs:
           make -j$(nproc || echo 4)
           cp -vfr Debug/*.so ../../x64/SamTSE/Mods/ST8VI/Bin
           cp -vfr Debug/*.so ../../x64/SamTSE/Mods/JumpFUN/Bin
+          
+    - name: Run CMake
+      run: |
+          cd ${{github.workspace}}/Sources
+          cp -vfr EntitiesMP/PlayerWeaponsHD.es EntitiesMP/PlayerWeapons.es
+          cat CMakeLists.txt | grep mtune
+          cmake -B ${{github.workspace}}/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
           
     - name: Run Build
       run: |
