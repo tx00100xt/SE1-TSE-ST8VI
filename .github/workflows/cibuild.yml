@@ -130,7 +130,6 @@ jobs:
         name: SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz
         path: SamTSE-ST8VI-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz          
 
-
   build-ubuntu-x64:
     name: Ubuntu ${{ matrix.Configuration }} ${{ matrix.Platform }}
     runs-on: ubuntu-latest
