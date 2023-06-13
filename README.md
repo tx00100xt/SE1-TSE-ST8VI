@@ -29,11 +29,11 @@ Building Serious Sam Classic ST8 MOD VI (only for SS:TSE)
 Type this in your terminal:
 
 ```
-git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git SE1-TSE-ST8VI
+git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git
 cd SE1-TSE-ST8VI/Sources
 ./build-linux64.sh      	    # use build-linux32.sh for 32-bits
 ```
-After that , libraries will be collected in the x32 or x64 directory . 
+After that , libraries will be collected in the Mods directory.   
 Copy them to SeriousSamClassic/SamTSE/Mods/ST8VI/Bin folder.
 
 ### Gentoo
@@ -49,6 +49,7 @@ To build a game under Arch Linux you can use the package from AUR: https://aur.a
 The build for raspberry pi is similar to the build for Linux, you just need to add an additional build key.
 
 ```
+git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git
 cd SE1-TSE-ST8VI/Sources
 ./build-linux64.sh -DRPI4=TRUE	# use build-linux32.sh for 32-bits
 ```
@@ -58,11 +59,30 @@ Install bash.
 Type this in your terminal:
 
 ```
-git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git SE1-TSE-ST8VI
+git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git
 cd SE1-TSE-ST8VI/Sources
 bash build-linux64.sh    	    # use build-linux32.sh for 32-bits
 ```
-After that , libraries will be collected in the x32 or x64 directory . 
+After that , libraries will be collected in the Mods directory.   
+Copy them to SeriousSamClassic/SamTSE/Mods/ST8VI/Bin folder.
+
+### macOS
+
+Install dependes
+```
+brew install bison flex sdl2 libogg libvorbis zlib-ng cmake git
+```
+Type this in your terminal:
+```
+git clone https://github.com/tx00100xt/SE1-TSE-ST8VI.git
+cd SE1-TSE-ST8VI/Sources
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j4
+make install
+```
+After that , libraries will be collected in the Mods directory.   
 Copy them to SeriousSamClassic/SamTSE/Mods/ST8VI/Bin folder.
 
 Windows
@@ -85,11 +105,12 @@ Supported OS
 * `FreeBSD`
 * `Windows`
 * `Raspberry PI OS`
+* `macOS`
 
 ### Build status
 |CI|Platform|Compiler|Configurations|Platforms|Status|
 |---|---|---|---|---|---|
-|GitHub Actions|Windows, Ubuntu, FreeBSD, Alpine, Raspberry PI OS Lite|MSVC, GCC, Clang|Release|x86, x64, armv7l, aarch64|![GitHub Actions Build Status](https://github.com/tx00100xt/SE1-TSE-ST8VI/actions/workflows/cibuild.yml/badge.svg)
+|GitHub Actions|Windows, Ubuntu, FreeBSD, Alpine, Raspberry PI OS Lite, macOS|MSVC, GCC, Clang|Release|x86, x64, armv7l, aarch64, riscv64, ppc64le, s390x|![GitHub Actions Build Status](https://github.com/tx00100xt/SE1-TSE-ST8VI/actions/workflows/cibuild.yml/badge.svg)
 
 You can download a the automatically build based on the latest commit.  
 To do this, go to the [Actions tab], select the top workflows, and then Artifacts.
