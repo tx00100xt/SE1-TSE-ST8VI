@@ -385,7 +385,7 @@ jobs:
       - name: Build on macOS
         run: |
             uname -a
-            sudo pkg install -y bison flex sdl2 libogg libvorbis zlib-ng cmake
+            brew install bison flex sdl2 libogg libvorbis zlib-ng cmake vulkan-loader vulkan-headers
             cd ${{github.workspace}}/Sources
             awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
             cat CMakeLists.txt | grep mtune
