@@ -1,8 +1,8 @@
 ## Serious Sam Classic ST8 MOD VI
-![Build status](https://github.com/tx00100xt/SE1-TSE-ST8VI/actions/workflows/cibuild.yml/badge.svg)
+[![Build status](https://github.com/tx00100xt/SE1-TSE-ST8VI/actions/workflows/cibuild.yml/badge.svg)](https://github.com/tx00100xt/SE1-TSE-ST8VI/actions/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/tx00100xt/SE1-TSE-ST8VI)
-[![Github downloads](https://img.shields.io/github/downloads/tx00100xt/SE1-TSE-ST8VI/total.svg?logo=github&logoColor=white&style=flat-square&color=E75776)]()
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/tx00100xt/SE1-TSE-ST8VI)](https://github.com/tx00100xt/SE1-TSE-ST8VI/releases/tag/v1.7.1)
+[![Github downloads](https://img.shields.io/github/downloads/tx00100xt/SE1-TSE-ST8VI/total.svg?logo=github&logoColor=white&style=flat-square&color=E75776)](https://github.com/tx00100xt/SE1-TSE-ST8VI/releases/)
 
 What is ST8 MOD VI?
 This is a modification for Serious Sam Classic The Second Encounter. 
